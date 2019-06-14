@@ -25,10 +25,6 @@ pub enum Pixel {
     YUVJ420P,
     YUVJ422P,
     YUVJ444P,
-    #[cfg(feature = "ff_api_xvmc")]
-    XVMC_MPEG2_MC,
-    #[cfg(feature = "ff_api_xvmc")]
-    XVMC_MPEG2_IDCT,
     UYVY422,
     UYYVYY411,
     BGR8,
@@ -50,16 +46,6 @@ pub enum Pixel {
     YUV440P,
     YUVJ440P,
     YUVA420P,
-    #[cfg(feature = "ff_api_vdpau")]
-    VDPAU_H264,
-    #[cfg(feature = "ff_api_vdpau")]
-    VDPAU_MPEG1,
-    #[cfg(feature = "ff_api_vdpau")]
-    VDPAU_MPEG2,
-    #[cfg(feature = "ff_api_vdpau")]
-    VDPAU_WMV3,
-    #[cfg(feature = "ff_api_vdpau")]
-    VDPAU_VC1,
     RGB48BE,
     RGB48LE,
 
@@ -79,7 +65,7 @@ pub enum Pixel {
     VAAPI_IDCT,
     #[cfg(feature = "ff_api_vaapi")]
     VAAPI_VLD,
-    #[cfg(not(feature = "ff_api_vaapi"))]
+
     VAAPI,
 
     YUV420P16LE,
@@ -88,8 +74,6 @@ pub enum Pixel {
     YUV422P16BE,
     YUV444P16LE,
     YUV444P16BE,
-    #[cfg(feature = "ff_api_vdpau")]
-    VDPAU_MPEG4,
     DXVA2_VLD,
 
     RGB444LE,
@@ -97,6 +81,9 @@ pub enum Pixel {
     BGR444LE,
     BGR444BE,
     YA8,
+
+    Y400A,
+    GRAY8A,
 
     BGR48BE,
     BGR48LE,
@@ -113,16 +100,16 @@ pub enum Pixel {
     YUV444P10LE,
     YUV422P9BE,
     YUV422P9LE,
-    VDA_VLD,
-
     GBRP,
+    GBR24P,
     GBRP9BE,
     GBRP9LE,
     GBRP10BE,
     GBRP10LE,
     GBRP16BE,
     GBRP16LE,
-
+    YUVA422P,
+    YUVA444P,
     YUVA420P9BE,
     YUVA420P9LE,
     YUVA422P9BE,
@@ -157,11 +144,12 @@ pub enum Pixel {
 
     YVYU422,
 
-    VDA,
-
     YA16BE,
     YA16LE,
 
+    GBRAP,
+    GBRAP16BE,
+    GBRAP16LE,
     QSV,
     MMAL,
 
@@ -173,8 +161,6 @@ pub enum Pixel {
     RGBZ,
     ZBGR,
     BGRZ,
-    YUVA444P,
-    YUVA422P,
 
     YUV420P12BE,
     YUV420P12LE,
@@ -192,9 +178,6 @@ pub enum Pixel {
     GBRP12LE,
     GBRP14BE,
     GBRP14LE,
-    GBRAP,
-    GBRAP16BE,
-    GBRAP16LE,
     YUVJ411P,
 
     BAYER_BGGR8,
@@ -210,6 +193,8 @@ pub enum Pixel {
     BAYER_GRBG16LE,
     BAYER_GRBG16BE,
 
+    XVMC,
+
     YUV440P10LE,
     YUV440P10BE,
     YUV440P12LE,
@@ -219,12 +204,37 @@ pub enum Pixel {
 
     VIDEOTOOLBOX,
 
-    // --- defaults
-    #[cfg(feature = "ff_api_xvmc")]
-    XVMC,
-    Y400A,
-    GRAY8A,
-    GBR24P,
+    P010LE,
+    P010BE,
+
+    GBRAP12BE,
+    GBRAP12LE,
+
+    GBRAP10BE,
+    GBRAP10LE,
+
+    MEDIACODEC,
+
+    GRAY12BE,
+    GRAY12LE,
+    GRAY10BE,
+    GRAY10LE,
+
+    P016LE,
+    P016BE,
+
+    D3D11,
+
+    GRAY9BE,
+    GRAY9LE,
+
+    GBRPF32BE,
+    GBRPF32LE,
+    GBRAPF32BE,
+    GBRAPF32LE,
+
+    DRM_PRIME,
+    OPENCL,
 
     RGB32,
     RGB32_1,
@@ -233,16 +243,21 @@ pub enum Pixel {
     ZRGB32,
     ZBGR32,
 
+    GRAY9,
+    GRAY10,
+    GRAY12,
     GRAY16,
     YA16,
     RGB48,
     RGB565,
     RGB555,
     RGB444,
+    RGBA64,
     BGR48,
     BGR565,
     BGR555,
     BGR444,
+    BGRA64,
 
     YUV420P9,
     YUV422P9,
@@ -267,12 +282,17 @@ pub enum Pixel {
     GBRP12,
     GBRP14,
     GBRP16,
+    GBRAP10,
+    GBRAP12,
     GBRAP16,
 
     BAYER_BGGR16,
     BAYER_RGGB16,
     BAYER_GBRG16,
     BAYER_GRBG16,
+
+    GBRPF32,
+    GBRAPF32,
 
     YUVA420P9,
     YUVA422P9,
@@ -287,29 +307,8 @@ pub enum Pixel {
     XYZ12,
     NV20,
     AYUV64,
-
-    P010LE,
-    P010BE,
-    GBRAP12BE,
-    GBRAP12LE,
-    GBRAP10LE,
-    GBRAP10BE,
-    MEDIACODEC,
-    GRAY12BE,
-    GRAY12LE,
-    GRAY10BE,
-    GRAY10LE,
-    P016LE,
-    P016BE,
-
-    D3D11,
-    GRAY9BE,
-    GRAY9LE,
-    GBRPF32BE,
-    GBRPF32LE,
-    GBRAPF32BE,
-    GBRAPF32LE,
-    DRM_PRIME,
+    P010,
+    P016
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -357,7 +356,6 @@ impl From<AVPixelFormat> for Pixel {
     fn from(value: AVPixelFormat) -> Self {
         match value {
             AV_PIX_FMT_NONE => Pixel::None,
-
             AV_PIX_FMT_YUV420P => Pixel::YUV420P,
             AV_PIX_FMT_YUYV422 => Pixel::YUYV422,
             AV_PIX_FMT_RGB24 => Pixel::RGB24,
@@ -373,10 +371,6 @@ impl From<AVPixelFormat> for Pixel {
             AV_PIX_FMT_YUVJ420P => Pixel::YUVJ420P,
             AV_PIX_FMT_YUVJ422P => Pixel::YUVJ422P,
             AV_PIX_FMT_YUVJ444P => Pixel::YUVJ444P,
-            #[cfg(feature = "ff_api_xvmc")]
-            AV_PIX_FMT_XVMC_MPEG2_MC => Pixel::XVMC_MPEG2_MC,
-            #[cfg(feature = "ff_api_xvmc")]
-            AV_PIX_FMT_XVMC_MPEG2_IDCT => Pixel::XVMC_MPEG2_IDCT,
             AV_PIX_FMT_UYVY422 => Pixel::UYVY422,
             AV_PIX_FMT_UYYVYY411 => Pixel::UYYVYY411,
             AV_PIX_FMT_BGR8 => Pixel::BGR8,
@@ -398,16 +392,6 @@ impl From<AVPixelFormat> for Pixel {
             AV_PIX_FMT_YUV440P => Pixel::YUV440P,
             AV_PIX_FMT_YUVJ440P => Pixel::YUVJ440P,
             AV_PIX_FMT_YUVA420P => Pixel::YUVA420P,
-            #[cfg(feature = "ff_api_vdpau")]
-            AV_PIX_FMT_VDPAU_H264 => Pixel::VDPAU_H264,
-            #[cfg(feature = "ff_api_vdpau")]
-            AV_PIX_FMT_VDPAU_MPEG1 => Pixel::VDPAU_MPEG1,
-            #[cfg(feature = "ff_api_vdpau")]
-            AV_PIX_FMT_VDPAU_MPEG2 => Pixel::VDPAU_MPEG2,
-            #[cfg(feature = "ff_api_vdpau")]
-            AV_PIX_FMT_VDPAU_WMV3 => Pixel::VDPAU_WMV3,
-            #[cfg(feature = "ff_api_vdpau")]
-            AV_PIX_FMT_VDPAU_VC1 => Pixel::VDPAU_VC1,
             AV_PIX_FMT_RGB48BE => Pixel::RGB48BE,
             AV_PIX_FMT_RGB48LE => Pixel::RGB48LE,
 
@@ -428,14 +412,15 @@ impl From<AVPixelFormat> for Pixel {
             #[cfg(feature = "ff_api_vaapi")]
             AV_PIX_FMT_VAAPI_VLD => Pixel::VAAPI_VLD,
 
+            #[cfg(not(feature = "ff_api_vaapi"))]
+            AV_PIX_FMT_VAAPI => Pixel::VAAPI,
+
             AV_PIX_FMT_YUV420P16LE => Pixel::YUV420P16LE,
             AV_PIX_FMT_YUV420P16BE => Pixel::YUV420P16BE,
             AV_PIX_FMT_YUV422P16LE => Pixel::YUV422P16LE,
             AV_PIX_FMT_YUV422P16BE => Pixel::YUV422P16BE,
             AV_PIX_FMT_YUV444P16LE => Pixel::YUV444P16LE,
             AV_PIX_FMT_YUV444P16BE => Pixel::YUV444P16BE,
-            #[cfg(feature = "ff_api_vdpau")]
-            AV_PIX_FMT_VDPAU_MPEG4 => Pixel::VDPAU_MPEG4,
             AV_PIX_FMT_DXVA2_VLD => Pixel::DXVA2_VLD,
 
             AV_PIX_FMT_RGB444LE => Pixel::RGB444LE,
@@ -459,8 +444,6 @@ impl From<AVPixelFormat> for Pixel {
             AV_PIX_FMT_YUV444P10LE => Pixel::YUV444P10LE,
             AV_PIX_FMT_YUV422P9BE => Pixel::YUV422P9BE,
             AV_PIX_FMT_YUV422P9LE => Pixel::YUV422P9LE,
-            AV_PIX_FMT_VDA_VLD => Pixel::VDA_VLD,
-
             AV_PIX_FMT_GBRP => Pixel::GBRP,
             AV_PIX_FMT_GBRP9BE => Pixel::GBRP9BE,
             AV_PIX_FMT_GBRP9LE => Pixel::GBRP9LE,
@@ -468,7 +451,8 @@ impl From<AVPixelFormat> for Pixel {
             AV_PIX_FMT_GBRP10LE => Pixel::GBRP10LE,
             AV_PIX_FMT_GBRP16BE => Pixel::GBRP16BE,
             AV_PIX_FMT_GBRP16LE => Pixel::GBRP16LE,
-
+            AV_PIX_FMT_YUVA422P => Pixel::YUVA422P,
+            AV_PIX_FMT_YUVA444P => Pixel::YUVA444P,
             AV_PIX_FMT_YUVA420P9BE => Pixel::YUVA420P9BE,
             AV_PIX_FMT_YUVA420P9LE => Pixel::YUVA420P9LE,
             AV_PIX_FMT_YUVA422P9BE => Pixel::YUVA422P9BE,
@@ -503,11 +487,12 @@ impl From<AVPixelFormat> for Pixel {
 
             AV_PIX_FMT_YVYU422 => Pixel::YVYU422,
 
-            AV_PIX_FMT_VDA => Pixel::VDA,
-
             AV_PIX_FMT_YA16BE => Pixel::YA16BE,
             AV_PIX_FMT_YA16LE => Pixel::YA16LE,
 
+            AV_PIX_FMT_GBRAP => Pixel::GBRAP,
+            AV_PIX_FMT_GBRAP16BE => Pixel::GBRAP16BE,
+            AV_PIX_FMT_GBRAP16LE => Pixel::GBRAP16LE,
             AV_PIX_FMT_QSV => Pixel::QSV,
             AV_PIX_FMT_MMAL => Pixel::MMAL,
 
@@ -519,8 +504,6 @@ impl From<AVPixelFormat> for Pixel {
             AV_PIX_FMT_RGB0 => Pixel::RGBZ,
             AV_PIX_FMT_0BGR => Pixel::ZBGR,
             AV_PIX_FMT_BGR0 => Pixel::BGRZ,
-            AV_PIX_FMT_YUVA444P => Pixel::YUVA444P,
-            AV_PIX_FMT_YUVA422P => Pixel::YUVA422P,
 
             AV_PIX_FMT_YUV420P12BE => Pixel::YUV420P12BE,
             AV_PIX_FMT_YUV420P12LE => Pixel::YUV420P12LE,
@@ -538,9 +521,6 @@ impl From<AVPixelFormat> for Pixel {
             AV_PIX_FMT_GBRP12LE => Pixel::GBRP12LE,
             AV_PIX_FMT_GBRP14BE => Pixel::GBRP14BE,
             AV_PIX_FMT_GBRP14LE => Pixel::GBRP14LE,
-            AV_PIX_FMT_GBRAP => Pixel::GBRAP,
-            AV_PIX_FMT_GBRAP16BE => Pixel::GBRAP16BE,
-            AV_PIX_FMT_GBRAP16LE => Pixel::GBRAP16LE,
             AV_PIX_FMT_YUVJ411P => Pixel::YUVJ411P,
 
             AV_PIX_FMT_BAYER_BGGR8 => Pixel::BAYER_BGGR8,
@@ -556,6 +536,8 @@ impl From<AVPixelFormat> for Pixel {
             AV_PIX_FMT_BAYER_GRBG16LE => Pixel::BAYER_GRBG16LE,
             AV_PIX_FMT_BAYER_GRBG16BE => Pixel::BAYER_GRBG16BE,
 
+            AV_PIX_FMT_XVMC => Pixel::XVMC,
+
             AV_PIX_FMT_YUV440P10LE => Pixel::YUV440P10LE,
             AV_PIX_FMT_YUV440P10BE => Pixel::YUV440P10BE,
             AV_PIX_FMT_YUV440P12LE => Pixel::YUV440P12LE,
@@ -567,28 +549,37 @@ impl From<AVPixelFormat> for Pixel {
 
             AV_PIX_FMT_P010LE => Pixel::P010LE,
             AV_PIX_FMT_P010BE => Pixel::P010BE,
+
             AV_PIX_FMT_GBRAP12BE => Pixel::GBRAP12BE,
             AV_PIX_FMT_GBRAP12LE => Pixel::GBRAP12LE,
-            AV_PIX_FMT_GBRAP10LE => Pixel::GBRAP10LE,
+
             AV_PIX_FMT_GBRAP10BE => Pixel::GBRAP10BE,
+            AV_PIX_FMT_GBRAP10LE => Pixel::GBRAP10LE,
+
             AV_PIX_FMT_MEDIACODEC => Pixel::MEDIACODEC,
+
             AV_PIX_FMT_GRAY12BE => Pixel::GRAY12BE,
             AV_PIX_FMT_GRAY12LE => Pixel::GRAY12LE,
             AV_PIX_FMT_GRAY10BE => Pixel::GRAY10BE,
             AV_PIX_FMT_GRAY10LE => Pixel::GRAY10LE,
+
             AV_PIX_FMT_P016LE => Pixel::P016LE,
             AV_PIX_FMT_P016BE => Pixel::P016BE,
 
-            AV_PIX_FMT_NB => Pixel::None,
-
             AV_PIX_FMT_D3D11 => Pixel::D3D11,
+
             AV_PIX_FMT_GRAY9BE => Pixel::GRAY9BE,
             AV_PIX_FMT_GRAY9LE => Pixel::GRAY9LE,
+
             AV_PIX_FMT_GBRPF32BE => Pixel::GBRPF32BE,
             AV_PIX_FMT_GBRPF32LE => Pixel::GBRPF32LE,
             AV_PIX_FMT_GBRAPF32BE => Pixel::GBRAPF32BE,
             AV_PIX_FMT_GBRAPF32LE => Pixel::GBRAPF32LE,
+
             AV_PIX_FMT_DRM_PRIME => Pixel::DRM_PRIME,
+            AV_PIX_FMT_OPENCL => Pixel::OPENCL,
+
+            AV_PIX_FMT_NB => Pixel::None,
         }
     }
 }
@@ -598,7 +589,6 @@ impl Into<AVPixelFormat> for Pixel {
     fn into(self) -> AVPixelFormat {
         match self {
             Pixel::None => AV_PIX_FMT_NONE,
-
             Pixel::YUV420P => AV_PIX_FMT_YUV420P,
             Pixel::YUYV422 => AV_PIX_FMT_YUYV422,
             Pixel::RGB24 => AV_PIX_FMT_RGB24,
@@ -614,10 +604,6 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::YUVJ420P => AV_PIX_FMT_YUVJ420P,
             Pixel::YUVJ422P => AV_PIX_FMT_YUVJ422P,
             Pixel::YUVJ444P => AV_PIX_FMT_YUVJ444P,
-            #[cfg(feature = "ff_api_xvmc")]
-            Pixel::XVMC_MPEG2_MC => AV_PIX_FMT_XVMC_MPEG2_MC,
-            #[cfg(feature = "ff_api_xvmc")]
-            Pixel::XVMC_MPEG2_IDCT => AV_PIX_FMT_XVMC_MPEG2_IDCT,
             Pixel::UYVY422 => AV_PIX_FMT_UYVY422,
             Pixel::UYYVYY411 => AV_PIX_FMT_UYYVYY411,
             Pixel::BGR8 => AV_PIX_FMT_BGR8,
@@ -639,16 +625,6 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::YUV440P => AV_PIX_FMT_YUV440P,
             Pixel::YUVJ440P => AV_PIX_FMT_YUVJ440P,
             Pixel::YUVA420P => AV_PIX_FMT_YUVA420P,
-            #[cfg(feature = "ff_api_vdpau")]
-            Pixel::VDPAU_H264 => AV_PIX_FMT_VDPAU_H264,
-            #[cfg(feature = "ff_api_vdpau")]
-            Pixel::VDPAU_MPEG1 => AV_PIX_FMT_VDPAU_MPEG1,
-            #[cfg(feature = "ff_api_vdpau")]
-            Pixel::VDPAU_MPEG2 => AV_PIX_FMT_VDPAU_MPEG2,
-            #[cfg(feature = "ff_api_vdpau")]
-            Pixel::VDPAU_WMV3 => AV_PIX_FMT_VDPAU_WMV3,
-            #[cfg(feature = "ff_api_vdpau")]
-            Pixel::VDPAU_VC1 => AV_PIX_FMT_VDPAU_VC1,
             Pixel::RGB48BE => AV_PIX_FMT_RGB48BE,
             Pixel::RGB48LE => AV_PIX_FMT_RGB48LE,
 
@@ -668,7 +644,7 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::VAAPI_IDCT => AV_PIX_FMT_VAAPI_IDCT,
             #[cfg(feature = "ff_api_vaapi")]
             Pixel::VAAPI_VLD => AV_PIX_FMT_VAAPI_VLD,
-            #[cfg(not(feature = "ff_api_vaapi"))]
+
             Pixel::VAAPI => AV_PIX_FMT_VAAPI,
 
             Pixel::YUV420P16LE => AV_PIX_FMT_YUV420P16LE,
@@ -677,8 +653,6 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::YUV422P16BE => AV_PIX_FMT_YUV422P16BE,
             Pixel::YUV444P16LE => AV_PIX_FMT_YUV444P16LE,
             Pixel::YUV444P16BE => AV_PIX_FMT_YUV444P16BE,
-            #[cfg(feature = "ff_api_vdpau")]
-            Pixel::VDPAU_MPEG4 => AV_PIX_FMT_VDPAU_MPEG4,
             Pixel::DXVA2_VLD => AV_PIX_FMT_DXVA2_VLD,
 
             Pixel::RGB444LE => AV_PIX_FMT_RGB444LE,
@@ -686,6 +660,9 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::BGR444LE => AV_PIX_FMT_BGR444LE,
             Pixel::BGR444BE => AV_PIX_FMT_BGR444BE,
             Pixel::YA8 => AV_PIX_FMT_YA8,
+
+            Pixel::Y400A => AV_PIX_FMT_Y400A,
+            Pixel::GRAY8A => AV_PIX_FMT_GRAY8A,
 
             Pixel::BGR48BE => AV_PIX_FMT_BGR48BE,
             Pixel::BGR48LE => AV_PIX_FMT_BGR48LE,
@@ -702,16 +679,16 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::YUV444P10LE => AV_PIX_FMT_YUV444P10LE,
             Pixel::YUV422P9BE => AV_PIX_FMT_YUV422P9BE,
             Pixel::YUV422P9LE => AV_PIX_FMT_YUV422P9LE,
-            Pixel::VDA_VLD => AV_PIX_FMT_VDA_VLD,
-
             Pixel::GBRP => AV_PIX_FMT_GBRP,
+            Pixel::GBR24P => AV_PIX_FMT_GBR24P,
             Pixel::GBRP9BE => AV_PIX_FMT_GBRP9BE,
             Pixel::GBRP9LE => AV_PIX_FMT_GBRP9LE,
             Pixel::GBRP10BE => AV_PIX_FMT_GBRP10BE,
             Pixel::GBRP10LE => AV_PIX_FMT_GBRP10LE,
             Pixel::GBRP16BE => AV_PIX_FMT_GBRP16BE,
             Pixel::GBRP16LE => AV_PIX_FMT_GBRP16LE,
-
+            Pixel::YUVA422P => AV_PIX_FMT_YUVA422P,
+            Pixel::YUVA444P => AV_PIX_FMT_YUVA444P,
             Pixel::YUVA420P9BE => AV_PIX_FMT_YUVA420P9BE,
             Pixel::YUVA420P9LE => AV_PIX_FMT_YUVA420P9LE,
             Pixel::YUVA422P9BE => AV_PIX_FMT_YUVA422P9BE,
@@ -746,11 +723,12 @@ impl Into<AVPixelFormat> for Pixel {
 
             Pixel::YVYU422 => AV_PIX_FMT_YVYU422,
 
-            Pixel::VDA => AV_PIX_FMT_VDA,
-
             Pixel::YA16BE => AV_PIX_FMT_YA16BE,
             Pixel::YA16LE => AV_PIX_FMT_YA16LE,
 
+            Pixel::GBRAP => AV_PIX_FMT_GBRAP,
+            Pixel::GBRAP16BE => AV_PIX_FMT_GBRAP16BE,
+            Pixel::GBRAP16LE => AV_PIX_FMT_GBRAP16LE,
             Pixel::QSV => AV_PIX_FMT_QSV,
             Pixel::MMAL => AV_PIX_FMT_MMAL,
 
@@ -762,8 +740,6 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::RGBZ => AV_PIX_FMT_RGB0,
             Pixel::ZBGR => AV_PIX_FMT_0BGR,
             Pixel::BGRZ => AV_PIX_FMT_BGR0,
-            Pixel::YUVA444P => AV_PIX_FMT_YUVA444P,
-            Pixel::YUVA422P => AV_PIX_FMT_YUVA422P,
 
             Pixel::YUV420P12BE => AV_PIX_FMT_YUV420P12BE,
             Pixel::YUV420P12LE => AV_PIX_FMT_YUV420P12LE,
@@ -781,9 +757,6 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::GBRP12LE => AV_PIX_FMT_GBRP12LE,
             Pixel::GBRP14BE => AV_PIX_FMT_GBRP14BE,
             Pixel::GBRP14LE => AV_PIX_FMT_GBRP14LE,
-            Pixel::GBRAP => AV_PIX_FMT_GBRAP,
-            Pixel::GBRAP16BE => AV_PIX_FMT_GBRAP16BE,
-            Pixel::GBRAP16LE => AV_PIX_FMT_GBRAP16LE,
             Pixel::YUVJ411P => AV_PIX_FMT_YUVJ411P,
 
             Pixel::BAYER_BGGR8 => AV_PIX_FMT_BAYER_BGGR8,
@@ -799,6 +772,8 @@ impl Into<AVPixelFormat> for Pixel {
             Pixel::BAYER_GRBG16LE => AV_PIX_FMT_BAYER_GRBG16LE,
             Pixel::BAYER_GRBG16BE => AV_PIX_FMT_BAYER_GRBG16BE,
 
+            Pixel::XVMC => AV_PIX_FMT_XVMC,
+
             Pixel::YUV440P10LE => AV_PIX_FMT_YUV440P10LE,
             Pixel::YUV440P10BE => AV_PIX_FMT_YUV440P10BE,
             Pixel::YUV440P12LE => AV_PIX_FMT_YUV440P12LE,
@@ -808,96 +783,317 @@ impl Into<AVPixelFormat> for Pixel {
 
             Pixel::VIDEOTOOLBOX => AV_PIX_FMT_VIDEOTOOLBOX,
 
-            // --- defaults
-            Pixel::XVMC => AV_PIX_FMT_XVMC,
-            Pixel::Y400A => AV_PIX_FMT_Y400A,
-            Pixel::GRAY8A => AV_PIX_FMT_GRAY8A,
-            Pixel::GBR24P => AV_PIX_FMT_GBR24P,
-
-            Pixel::RGB32 => AV_PIX_FMT_RGB32,
-            Pixel::RGB32_1 => AV_PIX_FMT_RGB32_1,
-            Pixel::BGR32 => AV_PIX_FMT_BGR32,
-            Pixel::BGR32_1 => AV_PIX_FMT_BGR32_1,
-            Pixel::ZRGB32 => AV_PIX_FMT_0RGB32,
-            Pixel::ZBGR32 => AV_PIX_FMT_0BGR32,
-
-            Pixel::GRAY16 => AV_PIX_FMT_GRAY16,
-            Pixel::YA16 => AV_PIX_FMT_YA16,
-            Pixel::RGB48 => AV_PIX_FMT_RGB48,
-            Pixel::RGB565 => AV_PIX_FMT_RGB565,
-            Pixel::RGB555 => AV_PIX_FMT_RGB555,
-            Pixel::RGB444 => AV_PIX_FMT_RGB444,
-            Pixel::BGR48 => AV_PIX_FMT_BGR48,
-            Pixel::BGR565 => AV_PIX_FMT_BGR565,
-            Pixel::BGR555 => AV_PIX_FMT_BGR555,
-            Pixel::BGR444 => AV_PIX_FMT_BGR444,
-
-            Pixel::YUV420P9 => AV_PIX_FMT_YUV420P9,
-            Pixel::YUV422P9 => AV_PIX_FMT_YUV422P9,
-            Pixel::YUV444P9 => AV_PIX_FMT_YUV444P9,
-            Pixel::YUV420P10 => AV_PIX_FMT_YUV420P10,
-            Pixel::YUV422P10 => AV_PIX_FMT_YUV422P10,
-            Pixel::YUV440P10 => AV_PIX_FMT_YUV440P10,
-            Pixel::YUV444P10 => AV_PIX_FMT_YUV444P10,
-            Pixel::YUV420P12 => AV_PIX_FMT_YUV420P12,
-            Pixel::YUV422P12 => AV_PIX_FMT_YUV422P12,
-            Pixel::YUV440P12 => AV_PIX_FMT_YUV440P12,
-            Pixel::YUV444P12 => AV_PIX_FMT_YUV444P12,
-            Pixel::YUV420P14 => AV_PIX_FMT_YUV420P14,
-            Pixel::YUV422P14 => AV_PIX_FMT_YUV422P14,
-            Pixel::YUV444P14 => AV_PIX_FMT_YUV444P14,
-            Pixel::YUV420P16 => AV_PIX_FMT_YUV420P16,
-            Pixel::YUV422P16 => AV_PIX_FMT_YUV422P16,
-            Pixel::YUV444P16 => AV_PIX_FMT_YUV444P16,
-
-            Pixel::GBRP9 => AV_PIX_FMT_GBRP9,
-            Pixel::GBRP10 => AV_PIX_FMT_GBRP10,
-            Pixel::GBRP12 => AV_PIX_FMT_GBRP12,
-            Pixel::GBRP14 => AV_PIX_FMT_GBRP14,
-            Pixel::GBRP16 => AV_PIX_FMT_GBRP16,
-            Pixel::GBRAP16 => AV_PIX_FMT_GBRAP16,
-
-            Pixel::BAYER_BGGR16 => AV_PIX_FMT_BAYER_BGGR16,
-            Pixel::BAYER_RGGB16 => AV_PIX_FMT_BAYER_RGGB16,
-            Pixel::BAYER_GBRG16 => AV_PIX_FMT_BAYER_GBRG16,
-            Pixel::BAYER_GRBG16 => AV_PIX_FMT_BAYER_GRBG16,
-
-            Pixel::YUVA420P9 => AV_PIX_FMT_YUVA420P9,
-            Pixel::YUVA422P9 => AV_PIX_FMT_YUVA422P9,
-            Pixel::YUVA444P9 => AV_PIX_FMT_YUVA444P9,
-            Pixel::YUVA420P10 => AV_PIX_FMT_YUVA420P10,
-            Pixel::YUVA422P10 => AV_PIX_FMT_YUVA422P10,
-            Pixel::YUVA444P10 => AV_PIX_FMT_YUVA444P10,
-            Pixel::YUVA420P16 => AV_PIX_FMT_YUVA420P16,
-            Pixel::YUVA422P16 => AV_PIX_FMT_YUVA422P16,
-            Pixel::YUVA444P16 => AV_PIX_FMT_YUVA444P16,
-
-            Pixel::XYZ12 => AV_PIX_FMT_XYZ12,
-            Pixel::NV20 => AV_PIX_FMT_NV20,
-            Pixel::AYUV64 => AV_PIX_FMT_AYUV64,
-
             Pixel::P010LE => AV_PIX_FMT_P010LE,
             Pixel::P010BE => AV_PIX_FMT_P010BE,
+
             Pixel::GBRAP12BE => AV_PIX_FMT_GBRAP12BE,
             Pixel::GBRAP12LE => AV_PIX_FMT_GBRAP12LE,
-            Pixel::GBRAP10LE => AV_PIX_FMT_GBRAP10LE,
+
             Pixel::GBRAP10BE => AV_PIX_FMT_GBRAP10BE,
+            Pixel::GBRAP10LE => AV_PIX_FMT_GBRAP10LE,
+
             Pixel::MEDIACODEC => AV_PIX_FMT_MEDIACODEC,
+
             Pixel::GRAY12BE => AV_PIX_FMT_GRAY12BE,
             Pixel::GRAY12LE => AV_PIX_FMT_GRAY12LE,
             Pixel::GRAY10BE => AV_PIX_FMT_GRAY10BE,
             Pixel::GRAY10LE => AV_PIX_FMT_GRAY10LE,
+
             Pixel::P016LE => AV_PIX_FMT_P016LE,
             Pixel::P016BE => AV_PIX_FMT_P016BE,
 
             Pixel::D3D11 => AV_PIX_FMT_D3D11,
+
             Pixel::GRAY9BE => AV_PIX_FMT_GRAY9BE,
             Pixel::GRAY9LE => AV_PIX_FMT_GRAY9LE,
+
             Pixel::GBRPF32BE => AV_PIX_FMT_GBRPF32BE,
             Pixel::GBRPF32LE => AV_PIX_FMT_GBRPF32LE,
             Pixel::GBRAPF32BE => AV_PIX_FMT_GBRAPF32BE,
             Pixel::GBRAPF32LE => AV_PIX_FMT_GBRAPF32LE,
+
             Pixel::DRM_PRIME => AV_PIX_FMT_DRM_PRIME,
+            Pixel::OPENCL => AV_PIX_FMT_OPENCL,
+
+            #[cfg(target_endian = "big")]
+            Pixel::RGB32 => AV_PIX_FMT_ARGB,
+            #[cfg(target_endian = "big")]
+            Pixel::RGB32_1 => AV_PIX_FMT_RGBA,
+            #[cfg(target_endian = "big")]
+            Pixel::BGR32 => AV_PIX_FMT_ABGR,
+            #[cfg(target_endian = "big")]
+            Pixel::BGR32_1 => AV_PIX_FMT_BGRA,
+            #[cfg(target_endian = "big")]
+            Pixel::ZRGB32 => AV_PIX_FMT_0RGB,
+            #[cfg(target_endian = "big")]
+            Pixel::ZBGR32 => AV_PIX_FMT_0BGR,
+
+            #[cfg(target_endian = "big")]
+            Pixel::GRAY9 => AV_PIX_FMT_GRAY9BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GRAY10 => AV_PIX_FMT_GRAY10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GRAY12 => AV_PIX_FMT_GRAY12BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GRAY16 => AV_PIX_FMT_GRAY16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YA16 => AV_PIX_FMT_YA16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::RGB48 => AV_PIX_FMT_RGB48BE,
+            #[cfg(target_endian = "big")]
+            Pixel::RGB565 => AV_PIX_FMT_RGB565BE,
+            #[cfg(target_endian = "big")]
+            Pixel::RGB555 => AV_PIX_FMT_RGB555BE,
+            #[cfg(target_endian = "big")]
+            Pixel::RGB444 => AV_PIX_FMT_RGB444BE,
+            #[cfg(target_endian = "big")]
+            Pixel::RGBA64 => AV_PIX_FMT_RGBA64BE,
+            #[cfg(target_endian = "big")]
+            Pixel::BGR48 => AV_PIX_FMT_BGR48BE,
+            #[cfg(target_endian = "big")]
+            Pixel::BGR565 => AV_PIX_FMT_BGR565BE,
+            #[cfg(target_endian = "big")]
+            Pixel::BGR555 => AV_PIX_FMT_BGR555BE,
+            #[cfg(target_endian = "big")]
+            Pixel::BGR444 => AV_PIX_FMT_BGR444BE,
+            #[cfg(target_endian = "big")]
+            Pixel::BGRA64 => AV_PIX_FMT_BGRA64BE,
+
+            #[cfg(target_endian = "big")]
+            Pixel::YUV420P9 => AV_PIX_FMT_YUV420P9BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV422P9 => AV_PIX_FMT_YUV422P9BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV444P9 => AV_PIX_FMT_YUV444P9BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV420P10 => AV_PIX_FMT_YUV420P10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV422P10 => AV_PIX_FMT_YUV422P10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV440P10 => AV_PIX_FMT_YUV440P10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV444P10 => AV_PIX_FMT_YUV444P10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV420P12 => AV_PIX_FMT_YUV420P12BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV422P12 => AV_PIX_FMT_YUV422P12BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV440P12 => AV_PIX_FMT_YUV440P12BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV444P12 => AV_PIX_FMT_YUV444P12BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV420P14 => AV_PIX_FMT_YUV420P14BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV422P14 => AV_PIX_FMT_YUV422P14BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV444P14 => AV_PIX_FMT_YUV444P14BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV420P16 => AV_PIX_FMT_YUV420P16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV422P16 => AV_PIX_FMT_YUV422P16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUV444P16 => AV_PIX_FMT_YUV444P16BE,
+
+            #[cfg(target_endian = "big")]
+            Pixel::GBRP9 => AV_PIX_FMT_GBRP9BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GBRP10 => AV_PIX_FMT_GBRP10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GBRP12 => AV_PIX_FMT_GBRP12BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GBRP14 => AV_PIX_FMT_GBRP14BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GBRP16 => AV_PIX_FMT_GBRP16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GBRAP10 => AV_PIX_FMT_GBRAP10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GBRAP12 => AV_PIX_FMT_GBRAP12BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GBRAP16 => AV_PIX_FMT_GBRAP16BE,
+
+            #[cfg(target_endian = "big")]
+            Pixel::BAYER_BGGR16 => AV_PIX_FMT_BAYER_BGGR16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::BAYER_RGGB16 => AV_PIX_FMT_BAYER_RGGB16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::BAYER_GBRG16 => AV_PIX_FMT_BAYER_GBRG16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::BAYER_GRBG16 => AV_PIX_FMT_BAYER_GRBG16BE,
+
+            #[cfg(target_endian = "big")]
+            Pixel::GBRPF32 => AV_PIX_FMT_GBRPF32BE,
+            #[cfg(target_endian = "big")]
+            Pixel::GBRAPF32 => AV_PIX_FMT_GBRAPF32BE,
+
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA420P9 => AV_PIX_FMT_YUVA420P9BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA422P9 => AV_PIX_FMT_YUVA422P9BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA444P9 => AV_PIX_FMT_YUVA444P9BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA420P10 => AV_PIX_FMT_YUVA420P10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA422P10 => AV_PIX_FMT_YUVA422P10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA444P10 => AV_PIX_FMT_YUVA444P10BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA420P16 => AV_PIX_FMT_YUVA420P16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA422P16 => AV_PIX_FMT_YUVA422P16BE,
+            #[cfg(target_endian = "big")]
+            Pixel::YUVA444P16 => AV_PIX_FMT_YUVA444P16BE,
+
+            #[cfg(target_endian = "big")]
+            Pixel::XYZ12 => AV_PIX_FMT_XYZ12BE,
+            #[cfg(target_endian = "big")]
+            Pixel::NV20 => AV_PIX_FMT_NV20BE,
+            #[cfg(target_endian = "big")]
+            Pixel::AYUV64 => AV_PIX_FMT_AYUV64BE,
+            #[cfg(target_endian = "big")]
+            Pixel::P010 => AV_PIX_FMT_P010BE,
+            #[cfg(target_endian = "big")]
+            Pixel::P016 => AV_PIX_FMT_P016BE,
+
+            #[cfg(target_endian = "little")]
+            Pixel::RGB32 => AV_PIX_FMT_BGRA,
+            #[cfg(target_endian = "little")]
+            Pixel::RGB32_1 => AV_PIX_FMT_ABGR,
+            #[cfg(target_endian = "little")]
+            Pixel::BGR32 => AV_PIX_FMT_RGBA,
+            #[cfg(target_endian = "little")]
+            Pixel::BGR32_1 => AV_PIX_FMT_ARGB,
+            #[cfg(target_endian = "little")]
+            Pixel::ZRGB32 => AV_PIX_FMT_BGR0,
+            #[cfg(target_endian = "little")]
+            Pixel::ZBGR32 => AV_PIX_FMT_RGB0,
+
+            #[cfg(target_endian = "little")]
+            Pixel::GRAY9 => AV_PIX_FMT_GRAY9LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GRAY10 => AV_PIX_FMT_GRAY10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GRAY12 => AV_PIX_FMT_GRAY12LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GRAY16 => AV_PIX_FMT_GRAY16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YA16 => AV_PIX_FMT_YA16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::RGB48 => AV_PIX_FMT_RGB48LE,
+            #[cfg(target_endian = "little")]
+            Pixel::RGB565 => AV_PIX_FMT_RGB565LE,
+            #[cfg(target_endian = "little")]
+            Pixel::RGB555 => AV_PIX_FMT_RGB555LE,
+            #[cfg(target_endian = "little")]
+            Pixel::RGB444 => AV_PIX_FMT_RGB444LE,
+            #[cfg(target_endian = "little")]
+            Pixel::RGBA64 => AV_PIX_FMT_RGBA64LE,
+            #[cfg(target_endian = "little")]
+            Pixel::BGR48 => AV_PIX_FMT_BGR48LE,
+            #[cfg(target_endian = "little")]
+            Pixel::BGR565 => AV_PIX_FMT_BGR565LE,
+            #[cfg(target_endian = "little")]
+            Pixel::BGR555 => AV_PIX_FMT_BGR555LE,
+            #[cfg(target_endian = "little")]
+            Pixel::BGR444 => AV_PIX_FMT_BGR444LE,
+            #[cfg(target_endian = "little")]
+            Pixel::BGRA64 => AV_PIX_FMT_BGRA64LE,
+
+            #[cfg(target_endian = "little")]
+            Pixel::YUV420P9 => AV_PIX_FMT_YUV420P9LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV422P9 => AV_PIX_FMT_YUV422P9LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV444P9 => AV_PIX_FMT_YUV444P9LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV420P10 => AV_PIX_FMT_YUV420P10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV422P10 => AV_PIX_FMT_YUV422P10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV440P10 => AV_PIX_FMT_YUV440P10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV444P10 => AV_PIX_FMT_YUV444P10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV420P12 => AV_PIX_FMT_YUV420P12LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV422P12 => AV_PIX_FMT_YUV422P12LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV440P12 => AV_PIX_FMT_YUV440P12LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV444P12 => AV_PIX_FMT_YUV444P12LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV420P14 => AV_PIX_FMT_YUV420P14LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV422P14 => AV_PIX_FMT_YUV422P14LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV444P14 => AV_PIX_FMT_YUV444P14LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV420P16 => AV_PIX_FMT_YUV420P16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV422P16 => AV_PIX_FMT_YUV422P16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUV444P16 => AV_PIX_FMT_YUV444P16LE,
+
+            #[cfg(target_endian = "little")]
+            Pixel::GBRP9 => AV_PIX_FMT_GBRP9LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GBRP10 => AV_PIX_FMT_GBRP10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GBRP12 => AV_PIX_FMT_GBRP12LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GBRP14 => AV_PIX_FMT_GBRP14LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GBRP16 => AV_PIX_FMT_GBRP16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GBRAP10 => AV_PIX_FMT_GBRAP10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GBRAP12 => AV_PIX_FMT_GBRAP12LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GBRAP16 => AV_PIX_FMT_GBRAP16LE,
+
+            #[cfg(target_endian = "little")]
+            Pixel::BAYER_BGGR16 => AV_PIX_FMT_BAYER_BGGR16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::BAYER_RGGB16 => AV_PIX_FMT_BAYER_RGGB16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::BAYER_GBRG16 => AV_PIX_FMT_BAYER_GBRG16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::BAYER_GRBG16 => AV_PIX_FMT_BAYER_GRBG16LE,
+
+            #[cfg(target_endian = "little")]
+            Pixel::GBRPF32 => AV_PIX_FMT_GBRPF32LE,
+            #[cfg(target_endian = "little")]
+            Pixel::GBRAPF32 => AV_PIX_FMT_GBRAPF32LE,
+
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA420P9 => AV_PIX_FMT_YUVA420P9LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA422P9 => AV_PIX_FMT_YUVA422P9LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA444P9 => AV_PIX_FMT_YUVA444P9LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA420P10 => AV_PIX_FMT_YUVA420P10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA422P10 => AV_PIX_FMT_YUVA422P10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA444P10 => AV_PIX_FMT_YUVA444P10LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA420P16 => AV_PIX_FMT_YUVA420P16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA422P16 => AV_PIX_FMT_YUVA422P16LE,
+            #[cfg(target_endian = "little")]
+            Pixel::YUVA444P16 => AV_PIX_FMT_YUVA444P16LE,
+
+            #[cfg(target_endian = "little")]
+            Pixel::XYZ12 => AV_PIX_FMT_XYZ12LE,
+            #[cfg(target_endian = "little")]
+            Pixel::NV20 => AV_PIX_FMT_NV20LE,
+            #[cfg(target_endian = "little")]
+            Pixel::AYUV64 => AV_PIX_FMT_AYUV64LE,
+            #[cfg(target_endian = "little")]
+            Pixel::P010 => AV_PIX_FMT_P010LE,
+            #[cfg(target_endian = "little")]
+            Pixel::P016 => AV_PIX_FMT_P016LE
         }
     }
 }

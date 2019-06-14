@@ -10,11 +10,8 @@ use util::media;
 pub enum Id {
     None,
 
-    // video codecs
     MPEG1VIDEO,
     MPEG2VIDEO,
-    #[cfg(feature = "ff_api_xvmc")]
-    MPEG2VIDEO_XVMC,
     H261,
     H263,
     RV10,
@@ -229,8 +226,22 @@ pub enum Id {
     MAGICYUV,
     SHEERVIDEO,
     YLC,
+    PSD,
+    PIXLET,
+    SPEEDHQ,
+    FMVC,
+    SCPR,
+    CLEARVIDEO,
+    XPM,
+    AV1,
+    BITPACKED,
+    MSCC,
+    SRGC,
+    SVG,
+    GDV,
+    FITS,
 
-    // various PCM "codecs"
+    FIRST_AUDIO,
     PCM_S16LE,
     PCM_S16BE,
     PCM_U16LE,
@@ -265,8 +276,9 @@ pub enum Id {
 
     PCM_S64LE,
     PCM_S64BE,
+    PCM_F16LE,
+    PCM_F24LE,
 
-    // various ADPCM codecs
     ADPCM_IMA_QT,
     ADPCM_IMA_WAV,
     ADPCM_IMA_DK3,
@@ -298,7 +310,6 @@ pub enum Id {
     ADPCM_G722,
     ADPCM_IMA_APC,
     ADPCM_VIMA,
-    VIMA,
 
     ADPCM_AFC,
     ADPCM_IMA_OKI,
@@ -311,23 +322,20 @@ pub enum Id {
     ADPCM_IMA_DAT4,
     ADPCM_MTAF,
 
-    // AMR
     AMR_NB,
     AMR_WB,
 
-    // RealAudio codecs
     RA_144,
     RA_288,
 
-    // various DPCM codecs
     ROQ_DPCM,
     INTERPLAY_DPCM,
     XAN_DPCM,
     SOL_DPCM,
 
     SDX2_DPCM,
+    GREMLIN_DPCM,
 
-    // audio codecs
     MP2,
     MP3,
     AAC,
@@ -360,8 +368,6 @@ pub enum Id {
     MLP,
     GSM_MS,
     ATRAC3,
-    #[cfg(feature = "ff_api_voxware")]
-    VOXWARE,
     APE,
     NELLYMOSER,
     MUSEPACK8,
@@ -397,6 +403,7 @@ pub enum Id {
     PAF_AUDIO,
     ON2AVC,
     DSS_SP,
+    CODEC2,
 
     FFWAVESYNTH,
     SONIC,
@@ -412,8 +419,14 @@ pub enum Id {
     XMA1,
     XMA2,
     DST,
+    ATRAC3AL,
+    ATRAC3PAL,
+    DOLBY_E,
+    APTX,
+    APTX_HD,
+    SBC,
 
-    // subtitle codecs
+    FIRST_SUBTITLE,
     DVD_SUBTITLE,
     DVB_SUBTITLE,
     TEXT,
@@ -440,7 +453,7 @@ pub enum Id {
     ASS,
     HDMV_TEXT_SUBTITLE,
 
-    // other specific kind of codecs (generally used for attachments)
+    FIRST_UNKNOWN,
     TTF,
 
     SCTE_35,
@@ -459,28 +472,6 @@ pub enum Id {
     MPEG4SYSTEMS,
     FFMETADATA,
     WRAPPED_AVFRAME,
-
-    PSD,
-    PIXLET,
-    SPEEDHQ,
-    CLEARVIDEO,
-    FMVC,
-    SCPR,
-    XPM,
-    AV1,
-    PCM_F16LE,
-    PCM_F24LE,
-    ATRAC3AL,
-    ATRAC3PAL,
-
-    BITPACKED,
-    MSCC,
-    SRGC,
-    SVG,
-    GDV,
-    FITS,
-    GREMLIN_DPCM,
-    DOLBY_E,
 }
 
 impl Id {
@@ -498,11 +489,8 @@ impl From<AVCodecID> for Id {
         match value {
             AV_CODEC_ID_NONE => Id::None,
 
-            /* video codecs */
             AV_CODEC_ID_MPEG1VIDEO => Id::MPEG1VIDEO,
             AV_CODEC_ID_MPEG2VIDEO => Id::MPEG2VIDEO,
-            #[cfg(feature = "ff_api_xvmc")]
-            AV_CODEC_ID_MPEG2VIDEO_XVMC => Id::MPEG2VIDEO_XVMC,
             AV_CODEC_ID_H261 => Id::H261,
             AV_CODEC_ID_H263 => Id::H263,
             AV_CODEC_ID_RV10 => Id::RV10,
@@ -715,9 +703,22 @@ impl From<AVCodecID> for Id {
             AV_CODEC_ID_MAGICYUV => Id::MAGICYUV,
             AV_CODEC_ID_SHEERVIDEO => Id::SHEERVIDEO,
             AV_CODEC_ID_YLC => Id::YLC,
+            AV_CODEC_ID_PSD => Id::PSD,
+            AV_CODEC_ID_PIXLET => Id::PIXLET,
+            AV_CODEC_ID_SPEEDHQ => Id::SPEEDHQ,
+            AV_CODEC_ID_FMVC => Id::FMVC,
+            AV_CODEC_ID_SCPR => Id::SCPR,
+            AV_CODEC_ID_CLEARVIDEO => Id::CLEARVIDEO,
+            AV_CODEC_ID_XPM => Id::XPM,
+            AV_CODEC_ID_AV1 => Id::AV1,
+            AV_CODEC_ID_BITPACKED => Id::BITPACKED,
+            AV_CODEC_ID_MSCC => Id::MSCC,
+            AV_CODEC_ID_SRGC => Id::SRGC,
+            AV_CODEC_ID_SVG => Id::SVG,
+            AV_CODEC_ID_GDV => Id::GDV,
+            AV_CODEC_ID_FITS => Id::FITS,
 
-            /* various PCM "codecs" */
-            AV_CODEC_ID_PCM_S16LE => Id::PCM_S16LE,
+            AV_CODEC_ID_FIRST_AUDIO => Id::FIRST_AUDIO,
             AV_CODEC_ID_PCM_S16BE => Id::PCM_S16BE,
             AV_CODEC_ID_PCM_U16LE => Id::PCM_U16LE,
             AV_CODEC_ID_PCM_U16BE => Id::PCM_U16BE,
@@ -751,8 +752,9 @@ impl From<AVCodecID> for Id {
 
             AV_CODEC_ID_PCM_S64LE => Id::PCM_S64LE,
             AV_CODEC_ID_PCM_S64BE => Id::PCM_S64BE,
+            AV_CODEC_ID_PCM_F16LE => Id::PCM_F16LE,
+            AV_CODEC_ID_PCM_F24LE => Id::PCM_F24LE,
 
-            /* various ADPCM codecs */
             AV_CODEC_ID_ADPCM_IMA_QT => Id::ADPCM_IMA_QT,
             AV_CODEC_ID_ADPCM_IMA_WAV => Id::ADPCM_IMA_WAV,
             AV_CODEC_ID_ADPCM_IMA_DK3 => Id::ADPCM_IMA_DK3,
@@ -796,23 +798,20 @@ impl From<AVCodecID> for Id {
             AV_CODEC_ID_ADPCM_IMA_DAT4 => Id::ADPCM_IMA_DAT4,
             AV_CODEC_ID_ADPCM_MTAF => Id::ADPCM_MTAF,
 
-            /* AMR */
             AV_CODEC_ID_AMR_NB => Id::AMR_NB,
             AV_CODEC_ID_AMR_WB => Id::AMR_WB,
 
-            /* RealAudio codecs*/
             AV_CODEC_ID_RA_144 => Id::RA_144,
             AV_CODEC_ID_RA_288 => Id::RA_288,
 
-            /* various DPCM codecs */
             AV_CODEC_ID_ROQ_DPCM => Id::ROQ_DPCM,
             AV_CODEC_ID_INTERPLAY_DPCM => Id::INTERPLAY_DPCM,
             AV_CODEC_ID_XAN_DPCM => Id::XAN_DPCM,
             AV_CODEC_ID_SOL_DPCM => Id::SOL_DPCM,
 
             AV_CODEC_ID_SDX2_DPCM => Id::SDX2_DPCM,
+            AV_CODEC_ID_GREMLIN_DPCM => Id::GREMLIN_DPCM,
 
-            /* audio codecs */
             AV_CODEC_ID_MP2 => Id::MP2,
             AV_CODEC_ID_MP3 => Id::MP3,
             AV_CODEC_ID_AAC => Id::AAC,
@@ -845,8 +844,6 @@ impl From<AVCodecID> for Id {
             AV_CODEC_ID_MLP => Id::MLP,
             AV_CODEC_ID_GSM_MS => Id::GSM_MS,
             AV_CODEC_ID_ATRAC3 => Id::ATRAC3,
-            #[cfg(feature = "ff_api_voxware")]
-            AV_CODEC_ID_VOXWARE => Id::VOXWARE,
             AV_CODEC_ID_APE => Id::APE,
             AV_CODEC_ID_NELLYMOSER => Id::NELLYMOSER,
             AV_CODEC_ID_MUSEPACK8 => Id::MUSEPACK8,
@@ -882,6 +879,7 @@ impl From<AVCodecID> for Id {
             AV_CODEC_ID_PAF_AUDIO => Id::PAF_AUDIO,
             AV_CODEC_ID_ON2AVC => Id::ON2AVC,
             AV_CODEC_ID_DSS_SP => Id::DSS_SP,
+            AV_CODEC_ID_CODEC2 => Id::CODEC2,
 
             AV_CODEC_ID_FFWAVESYNTH => Id::FFWAVESYNTH,
             AV_CODEC_ID_SONIC => Id::SONIC,
@@ -897,9 +895,14 @@ impl From<AVCodecID> for Id {
             AV_CODEC_ID_XMA1 => Id::XMA1,
             AV_CODEC_ID_XMA2 => Id::XMA2,
             AV_CODEC_ID_DST => Id::DST,
+            AV_CODEC_ID_ATRAC3AL => Id::ATRAC3AL,
+            AV_CODEC_ID_ATRAC3PAL => Id::ATRAC3PAL,
+            AV_CODEC_ID_DOLBY_E => Id::DOLBY_E,
+            AV_CODEC_ID_APTX => Id::APTX,
+            AV_CODEC_ID_APTX_HD => Id::APTX_HD,
+            AV_CODEC_ID_SBC => Id::SBC,
 
-            /* subtitle codecs */
-            AV_CODEC_ID_DVD_SUBTITLE => Id::DVD_SUBTITLE,
+            AV_CODEC_ID_FIRST_SUBTITLE => Id::FIRST_SUBTITLE,
             AV_CODEC_ID_DVB_SUBTITLE => Id::DVB_SUBTITLE,
             AV_CODEC_ID_TEXT => Id::TEXT,
             AV_CODEC_ID_XSUB => Id::XSUB,
@@ -925,8 +928,7 @@ impl From<AVCodecID> for Id {
             AV_CODEC_ID_ASS => Id::ASS,
             AV_CODEC_ID_HDMV_TEXT_SUBTITLE => Id::HDMV_TEXT_SUBTITLE,
 
-            /* other specific kind of codecs (generally used for attachments) */
-            AV_CODEC_ID_TTF => Id::TTF,
+            AV_CODEC_ID_FIRST_UNKNOWN => Id::FIRST_UNKNOWN,
 
             AV_CODEC_ID_SCTE_35 => Id::SCTE_35,
             AV_CODEC_ID_BINTEXT => Id::BINTEXT,
@@ -944,27 +946,6 @@ impl From<AVCodecID> for Id {
             AV_CODEC_ID_MPEG4SYSTEMS => Id::MPEG4SYSTEMS,
             AV_CODEC_ID_FFMETADATA => Id::FFMETADATA,
             AV_CODEC_ID_WRAPPED_AVFRAME => Id::WRAPPED_AVFRAME,
-            AV_CODEC_ID_PSD => Id::PSD,
-            AV_CODEC_ID_PIXLET => Id::PIXLET,
-            AV_CODEC_ID_SPEEDHQ => Id::SPEEDHQ,
-            AV_CODEC_ID_CLEARVIDEO => Id::CLEARVIDEO,
-            AV_CODEC_ID_FMVC => Id::FMVC,
-            AV_CODEC_ID_SCPR => Id::SCPR,
-            AV_CODEC_ID_XPM => Id::XPM,
-            AV_CODEC_ID_AV1 => Id::AV1,
-            AV_CODEC_ID_PCM_F16LE => Id::PCM_F16LE,
-            AV_CODEC_ID_PCM_F24LE => Id::PCM_F24LE,
-            AV_CODEC_ID_ATRAC3AL => Id::ATRAC3AL,
-            AV_CODEC_ID_ATRAC3PAL => Id::ATRAC3PAL,
-
-            AV_CODEC_ID_BITPACKED => Id::BITPACKED,
-            AV_CODEC_ID_MSCC => Id::MSCC,
-            AV_CODEC_ID_SRGC => Id::SRGC,
-            AV_CODEC_ID_SVG => Id::SVG,
-            AV_CODEC_ID_GDV => Id::GDV,
-            AV_CODEC_ID_FITS => Id::FITS,
-            AV_CODEC_ID_GREMLIN_DPCM => Id::GREMLIN_DPCM,
-            AV_CODEC_ID_DOLBY_E => Id::DOLBY_E,
         }
     }
 }
@@ -974,11 +955,8 @@ impl Into<AVCodecID> for Id {
         match self {
             Id::None => AV_CODEC_ID_NONE,
 
-            /* video codecs */
             Id::MPEG1VIDEO => AV_CODEC_ID_MPEG1VIDEO,
             Id::MPEG2VIDEO => AV_CODEC_ID_MPEG2VIDEO,
-            #[cfg(feature = "ff_api_xvmc")]
-            Id::MPEG2VIDEO_XVMC => AV_CODEC_ID_MPEG2VIDEO_XVMC,
             Id::H261 => AV_CODEC_ID_H261,
             Id::H263 => AV_CODEC_ID_H263,
             Id::RV10 => AV_CODEC_ID_RV10,
@@ -1193,8 +1171,22 @@ impl Into<AVCodecID> for Id {
             Id::MAGICYUV => AV_CODEC_ID_MAGICYUV,
             Id::SHEERVIDEO => AV_CODEC_ID_SHEERVIDEO,
             Id::YLC => AV_CODEC_ID_YLC,
+            Id::PSD => AV_CODEC_ID_PSD,
+            Id::PIXLET => AV_CODEC_ID_PIXLET,
+            Id::SPEEDHQ => AV_CODEC_ID_SPEEDHQ,
+            Id::FMVC => AV_CODEC_ID_FMVC,
+            Id::SCPR => AV_CODEC_ID_SCPR,
+            Id::CLEARVIDEO => AV_CODEC_ID_CLEARVIDEO,
+            Id::XPM => AV_CODEC_ID_XPM,
+            Id::AV1 => AV_CODEC_ID_AV1,
+            Id::BITPACKED => AV_CODEC_ID_BITPACKED,
+            Id::MSCC => AV_CODEC_ID_MSCC,
+            Id::SRGC => AV_CODEC_ID_SRGC,
+            Id::SVG => AV_CODEC_ID_SVG,
+            Id::GDV => AV_CODEC_ID_GDV,
+            Id::FITS => AV_CODEC_ID_FITS,
 
-            /* various PCM "codecs" */
+            Id::FIRST_AUDIO => AV_CODEC_ID_FIRST_AUDIO,
             Id::PCM_S16LE => AV_CODEC_ID_PCM_S16LE,
             Id::PCM_S16BE => AV_CODEC_ID_PCM_S16BE,
             Id::PCM_U16LE => AV_CODEC_ID_PCM_U16LE,
@@ -1229,8 +1221,9 @@ impl Into<AVCodecID> for Id {
 
             Id::PCM_S64LE => AV_CODEC_ID_PCM_S64LE,
             Id::PCM_S64BE => AV_CODEC_ID_PCM_S64BE,
+            Id::PCM_F16LE => AV_CODEC_ID_PCM_F16LE,
+            Id::PCM_F24LE => AV_CODEC_ID_PCM_F24LE,
 
-            /* various ADPCM codecs */
             Id::ADPCM_IMA_QT => AV_CODEC_ID_ADPCM_IMA_QT,
             Id::ADPCM_IMA_WAV => AV_CODEC_ID_ADPCM_IMA_WAV,
             Id::ADPCM_IMA_DK3 => AV_CODEC_ID_ADPCM_IMA_DK3,
@@ -1262,7 +1255,6 @@ impl Into<AVCodecID> for Id {
             Id::ADPCM_G722 => AV_CODEC_ID_ADPCM_G722,
             Id::ADPCM_IMA_APC => AV_CODEC_ID_ADPCM_IMA_APC,
             Id::ADPCM_VIMA => AV_CODEC_ID_ADPCM_VIMA,
-            Id::VIMA => AV_CODEC_ID_VIMA,
 
             Id::ADPCM_AFC => AV_CODEC_ID_ADPCM_AFC,
             Id::ADPCM_IMA_OKI => AV_CODEC_ID_ADPCM_IMA_OKI,
@@ -1275,23 +1267,20 @@ impl Into<AVCodecID> for Id {
             Id::ADPCM_IMA_DAT4 => AV_CODEC_ID_ADPCM_IMA_DAT4,
             Id::ADPCM_MTAF => AV_CODEC_ID_ADPCM_MTAF,
 
-            /* AMR */
             Id::AMR_NB => AV_CODEC_ID_AMR_NB,
             Id::AMR_WB => AV_CODEC_ID_AMR_WB,
 
-            /* RealAudio codecs*/
             Id::RA_144 => AV_CODEC_ID_RA_144,
             Id::RA_288 => AV_CODEC_ID_RA_288,
 
-            /* various DPCM codecs */
             Id::ROQ_DPCM => AV_CODEC_ID_ROQ_DPCM,
             Id::INTERPLAY_DPCM => AV_CODEC_ID_INTERPLAY_DPCM,
             Id::XAN_DPCM => AV_CODEC_ID_XAN_DPCM,
             Id::SOL_DPCM => AV_CODEC_ID_SOL_DPCM,
 
             Id::SDX2_DPCM => AV_CODEC_ID_SDX2_DPCM,
+            Id::GREMLIN_DPCM => AV_CODEC_ID_GREMLIN_DPCM,
 
-            /* audio codecs */
             Id::MP2 => AV_CODEC_ID_MP2,
             Id::MP3 => AV_CODEC_ID_MP3,
             Id::AAC => AV_CODEC_ID_AAC,
@@ -1324,8 +1313,6 @@ impl Into<AVCodecID> for Id {
             Id::MLP => AV_CODEC_ID_MLP,
             Id::GSM_MS => AV_CODEC_ID_GSM_MS,
             Id::ATRAC3 => AV_CODEC_ID_ATRAC3,
-            #[cfg(feature = "ff_api_voxware")]
-            Id::VOXWARE => AV_CODEC_ID_VOXWARE,
             Id::APE => AV_CODEC_ID_APE,
             Id::NELLYMOSER => AV_CODEC_ID_NELLYMOSER,
             Id::MUSEPACK8 => AV_CODEC_ID_MUSEPACK8,
@@ -1361,6 +1348,7 @@ impl Into<AVCodecID> for Id {
             Id::PAF_AUDIO => AV_CODEC_ID_PAF_AUDIO,
             Id::ON2AVC => AV_CODEC_ID_ON2AVC,
             Id::DSS_SP => AV_CODEC_ID_DSS_SP,
+            Id::CODEC2 => AV_CODEC_ID_CODEC2,
 
             Id::FFWAVESYNTH => AV_CODEC_ID_FFWAVESYNTH,
             Id::SONIC => AV_CODEC_ID_SONIC,
@@ -1376,8 +1364,14 @@ impl Into<AVCodecID> for Id {
             Id::XMA1 => AV_CODEC_ID_XMA1,
             Id::XMA2 => AV_CODEC_ID_XMA2,
             Id::DST => AV_CODEC_ID_DST,
+            Id::ATRAC3AL => AV_CODEC_ID_ATRAC3AL,
+            Id::ATRAC3PAL => AV_CODEC_ID_ATRAC3PAL,
+            Id::DOLBY_E => AV_CODEC_ID_DOLBY_E,
+            Id::APTX => AV_CODEC_ID_APTX,
+            Id::APTX_HD => AV_CODEC_ID_APTX_HD,
+            Id::SBC => AV_CODEC_ID_SBC,
 
-            /* subtitle codecs */
+            Id::FIRST_SUBTITLE => AV_CODEC_ID_FIRST_SUBTITLE,
             Id::DVD_SUBTITLE => AV_CODEC_ID_DVD_SUBTITLE,
             Id::DVB_SUBTITLE => AV_CODEC_ID_DVB_SUBTITLE,
             Id::TEXT => AV_CODEC_ID_TEXT,
@@ -1404,7 +1398,7 @@ impl Into<AVCodecID> for Id {
             Id::ASS => AV_CODEC_ID_ASS,
             Id::HDMV_TEXT_SUBTITLE => AV_CODEC_ID_HDMV_TEXT_SUBTITLE,
 
-            /* other specific kind of codecs (generally used for attachments) */
+            Id::FIRST_UNKNOWN => AV_CODEC_ID_FIRST_UNKNOWN,
             Id::TTF => AV_CODEC_ID_TTF,
 
             Id::SCTE_35 => AV_CODEC_ID_SCTE_35,
@@ -1423,28 +1417,6 @@ impl Into<AVCodecID> for Id {
             Id::MPEG4SYSTEMS => AV_CODEC_ID_MPEG4SYSTEMS,
             Id::FFMETADATA => AV_CODEC_ID_FFMETADATA,
             Id::WRAPPED_AVFRAME => AV_CODEC_ID_WRAPPED_AVFRAME,
-
-            Id::PSD => AV_CODEC_ID_PSD,
-            Id::PIXLET => AV_CODEC_ID_PIXLET,
-            Id::SPEEDHQ => AV_CODEC_ID_SPEEDHQ,
-            Id::FMVC => AV_CODEC_ID_FMVC,
-            Id::CLEARVIDEO => AV_CODEC_ID_CLEARVIDEO,
-            Id::SCPR => AV_CODEC_ID_SCPR,
-            Id::XPM => AV_CODEC_ID_XPM,
-            Id::AV1 => AV_CODEC_ID_AV1,
-            Id::PCM_F16LE => AV_CODEC_ID_PCM_F16LE,
-            Id::PCM_F24LE => AV_CODEC_ID_PCM_F24LE,
-            Id::ATRAC3AL => AV_CODEC_ID_ATRAC3AL,
-            Id::ATRAC3PAL => AV_CODEC_ID_ATRAC3PAL,
-
-            Id::BITPACKED => AV_CODEC_ID_BITPACKED,
-            Id::MSCC => AV_CODEC_ID_MSCC,
-            Id::SRGC => AV_CODEC_ID_SRGC,
-            Id::SVG => AV_CODEC_ID_SVG,
-            Id::GDV => AV_CODEC_ID_GDV,
-            Id::FITS => AV_CODEC_ID_FITS,
-            Id::GREMLIN_DPCM => AV_CODEC_ID_GREMLIN_DPCM,
-            Id::DOLBY_E => AV_CODEC_ID_DOLBY_E,
         }
     }
 }

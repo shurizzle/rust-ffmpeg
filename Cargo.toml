@@ -1,6 +1,6 @@
 [package]
 name    = "ffmpeg"
-version = "0.2.0-alpha.2"
+version = "4.0.4"
 build   = "build.rs"
 
 authors = ["meh. <meh@schizofreni.co>"]
@@ -95,5 +95,6 @@ version  = "0.12"
 optional = true
 
 [dependencies.ffmpeg-sys]
-version = "3.3"
+git = "https://github.com/shurizzle/rust-ffmpeg-sys"
+rev = "3d670fe4294da9b81933d2c462651d93bb5fc14a"
 default-features = false

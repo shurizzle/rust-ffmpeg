@@ -8,7 +8,6 @@ bitflags! {
         const TRUNCATED           = AV_CODEC_CAP_TRUNCATED;
         const DELAY               = AV_CODEC_CAP_DELAY;
         const SMALL_LAST_FRAME    = AV_CODEC_CAP_SMALL_LAST_FRAME;
-        const HWACCEL_VDPAU       = AV_CODEC_CAP_HWACCEL_VDPAU;
         const SUBFRAMES           = AV_CODEC_CAP_SUBFRAMES;
         const EXPERIMENTAL        = AV_CODEC_CAP_EXPERIMENTAL;
         const CHANNEL_CONF        = AV_CODEC_CAP_CHANNEL_CONF;
@@ -17,7 +16,10 @@ bitflags! {
         const PARAM_CHANGE        = AV_CODEC_CAP_PARAM_CHANGE;
         const AUTO_THREADS        = AV_CODEC_CAP_AUTO_THREADS;
         const VARIABLE_FRAME_SIZE = AV_CODEC_CAP_VARIABLE_FRAME_SIZE;
+        const AVOID_PROBING       = AV_CODEC_CAP_AVOID_PROBING;
         const INTRA_ONLY          = AV_CODEC_CAP_INTRA_ONLY;
         const LOSSLESS            = AV_CODEC_CAP_LOSSLESS;
+        const HARDWARE            = AV_CODEC_CAP_HARDWARE;
+        const HYBRID              = AV_CODEC_CAP_HYBRID;
     }
 }
